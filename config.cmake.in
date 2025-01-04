@@ -1,0 +1,21 @@
+/*
+ *  Charisma - Unicode® character encoder and decoder library.
+ *  Copyright (c) 2025 Railgun Labs, LLC
+ *
+ *  This file is part of Charisma, distributed under a non-commercial use software
+ *  license. For the full terms see the included LICENSE file. If you did not
+ *  receive a LICENSE file or you would like to purchase a commercial license,
+ *  contact us at <https://RailgunLabs.com/contact/>.
+ */
+
+#ifndef CHARISMA_CONFIG_H
+#define CHARISMA_CONFIG_H
+
+#cmakedefine HAVE_BIG_ENDIAN
+
+#cmakedefine HAVE_FREEBSD_BSWAP
+#cmakedefine HAVE_LINUX_BSWAP
+#cmakedefine HAVE_GETTIMEOFDAY
+#cmakedefine HAVE_MSVC_BYTESWAP
+
+#endif

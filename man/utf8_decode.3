@@ -1,0 +1,38 @@
+.TH "CHARISMA" "3" "Jan 4th 2025" "Charisma 1.0.0"
+.SH NAME
+utf8_decode \- decode UTF-8
+.SH LIBRARY
+Character decoder library (libcharisma, -lcharisma)
+.SH SYNOPSIS
+.nf
+.B #include <charisma.h>
+.PP
+.BI "int32_t utf8_decode(const uint8_t *" text ", int32_t " length ", int32_t *" index ", uchar *" c ");"
+.fi
+.SH DESCRIPTION
+Decodes the Unicode scalar value from the UTF-8 encoded \f[I]text\f[R] at code unit \f[I]index\f[R] and writes it to \f[I]c\f[R].
+The number of code units in \f[I]text\f[R] is specified by \f[I]length\f[R], which, if negative, indicates that \f[I]text\f[R] is null-terminated.
+The implementation updates \f[I]index\f[R] to the code unit index of the next Unicode scalar value.
+.PP
+If the character at code unit \f[I]index\f[R] is malformed, the Unicode Replacement Character (\f[C]U+FFFD\f[R]) is written to \f[I]c\f[R], and the implementation safely advances beyond it.
+.SH RETURN VALUE
+Returns a positive integer when a well-formed Unicode character is decoded, writing the decoded scalar value to \f[I]c\f[R].
+Returns a negative integer when a malformed character is encountered, writing the Unicode Replacement Character (\f[C]U+FFFD\f[R]) to \f[I]c\f[R].
+Returns zero when the end of \f[I]text\f[R] is reached, writing NUL (\f[C]U+0000\f[R]) to \f[I]c\f[R].
+.SH SEE ALSO
+.BR utf8_encode (3),
+.BR utf16_decode (3),
+.BR utf32_decode (3),
+.BR uchar (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/charisma
+Railgun Labs website
+.UE .
+.SH LICENSING
+Charisma is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Charisma and for a DISCLAIMER OF ALL WARRANTIES.

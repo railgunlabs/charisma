@@ -1,0 +1,92 @@
+.TH "CHARISMA" "3" "Jan 4th 2025" "Charisma 1.0.0"
+.SH NAME
+charisma.h \- unicode character decoder
+.SH LIBRARY
+Character decoder library (libcharisma, -lcharisma)
+.SH SYNOPSIS
+.nf
+.B #include <charisma.h>
+.fi
+.SH DESCRIPTION
+Charisma is a Unicode® character decoder and encoder library written in C99 with no dependencies.
+It provides functions for decoding and encoding characters safely in UTF-8, UTF-16, and UTF-32 (big or little endian byte order).
+It can recover from malformed characters, allowing decoding to continue.
+.PP
+Charisma conforms to the MISRA C:2012 coding standard.
+.SS Decoding functions
+.PP
+The utf*_decode() functions accept four arguments: (1) a pointer to a Unicode character encoded string; (2) the length of the string in code units or -1 if the string is null terminated; (3) a code unit index to an encoded character in the string; (4) a pointer to memory where the decoded Unicode scalar value will be written.
+.PP
+These functions return an integer 'n' which is one of three possible values: (1) n > 0, where 'n' is the number of code units in the encoded character; (2) n = 0, if the code unit index is at the end of the string; (3) n < 0, if a malformed character is found.
+.PP
+The encoding of the string is specified by the prefix of the function, e.g. "utf8_" indicates a UTF-8 encoded string, "utf32be" indicates a UTF-32 big endian string.
+Functions without an explicit endian in their name assume native byte order.
+.SS Encoding functions
+.PP
+The utf*_encode() functions accept a Unicode scalar value, encode it in the associated Unicode encoding form and write the results to the buffer pointed to by the second argument.
+The number of code units written is returned.
+If the input character is not a Unicode scalar valid, then -1 is returned.
+Note that a null terminator is never written to the buffer.
+.PP
+The encoding of the buffer is specified by the prefix of the function, e.g. "utf8_" indicates a UTF-8 encoded string, "utf32be" indicates a UTF-32 big endian string.
+Functions without an explicit endian in their name assume native byte order.
+.TS
+tab(;);
+l l.
+\fBFunctions\fR;\fBDescription\fR
+_
+\fButf8_decode\fR(3);T{
+Decode UTF-8.
+T}
+\fButf16_decode\fR(3);T{
+Decode UTF-16 (native byte order).
+T}
+\fButf16be_decode\fR(3);T{
+Decode UTF-16 (big endian).
+T}
+\fButf16le_decode\fR(3);T{
+Decode UTF-16 (little endian).
+T}
+\fButf32_decode\fR(3);T{
+Decode UTF-32 (native byte order).
+T}
+\fButf32be_decode\fR(3);T{
+Decode UTF-32 (big endian).
+T}
+\fButf32le_decode\fR(3);T{
+Decode UTF-32 (little endian).
+T}
+\fButf8_encode\fR(3);T{
+Encode to UTF-8.
+T}
+\fButf16_encode\fR(3);T{
+Encode to UTF-16 (native byte order).
+T}
+\fButf16be_encode\fR(3);T{
+Encode to UTF-16 (big endian).
+T}
+\fButf16le_encode\fR(3);T{
+Encode to UTF-16 (little endian).
+T}
+\fButf32_encode\fR(3);T{
+Encode to UTF-32 (native byte order).
+T}
+\fButf32be_encode\fR(3);T{
+Encode to UTF-32 (big endian).
+T}
+\fButf32le_encode\fR(3);T{
+Encode to UTF-32 (little endian).
+T}
+.TE
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/charisma
+Railgun Labs website
+.UE .
+.SH LICENSING
+Charisma is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Charisma and for a DISCLAIMER OF ALL WARRANTIES.

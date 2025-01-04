@@ -1,0 +1,36 @@
+.TH "CHARISMA" "3" "Jan 4th 2025" "Charisma 1.0.0"
+.SH NAME
+utf16_encode \- encode to UTF-16 (native byte order)
+.SH LIBRARY
+Character decoder library (libcharisma, -lcharisma)
+.SH SYNOPSIS
+.nf
+.B #include <charisma.h>
+.PP
+.BI "int32_t utf16_encode(uchar " c ", uint16_t *" buf ");"
+.fi
+.SH DESCRIPTION
+Encodes the Unicode scalar value \f[I]c\f[R] as UTF-16 code unit(s) and writes them to \f[I]buf\f[R].
+The length of \f[I]buf\f[R] must be at least two code units.
+.PP
+If \f[I]c\f[R] is not a valid Unicode scalar value, \f[I]buf\f[R] remains unchanged and a negative integer is returned.
+.SH RETURN VALUE
+Returns the number of code units written to \f[I]buf\f[R] on success.
+Returns a negative integer if \f[I]c\f[R] is not a valid Unicode scalar value.
+.SH SEE ALSO
+.BR utf16_decode (3),
+.BR utf8_encode (3),
+.BR utf32_encode (3),
+.BR uchar (3)
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.SH INTERNET RESOURCES
+The online documentation is published on the
+.UR https://railgunlabs.com/charisma
+Railgun Labs website
+.UE .
+.SH LICENSING
+Charisma is distributed with its end-user license agreement (EULA).
+Please review the agreement for information on terms & conditions for accessing or otherwise using Charisma and for a DISCLAIMER OF ALL WARRANTIES.

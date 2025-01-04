@@ -1,0 +1,82 @@
+#[=======================================================================[.rst:
+FindCharisma
+------------
+
+Finds the Charisma library.
+
+Imported Targets
+^^^^^^^^^^^^^^^^
+
+This module provides the following imported targets, if found:
+
+``Railgun::Charisma``
+  The Charisma library
+
+Result Variables
+^^^^^^^^^^^^^^^^
+
+This will define the following variables:
+
+``CHARISMA_FOUND``
+  True if the system has the Charisma library.
+``CHARISMA_VERSION``
+  The version of the Charisma library which was found.
+``CHARISMA_INCLUDE_DIRS``
+  Include directories needed to use Charisma.
+``CHARISMA_LIBRARIES``
+  Libraries needed to link to Charisma.
+
+Cache Variables
+^^^^^^^^^^^^^^^
+
+The following cache variables may also be set:
+
+``CHARISMA_INCLUDE_DIR``
+  The directory containing ``charisma.h``.
+``CHARISMA_LIBRARY``
+  The path to the Charisma library.
+
+#]=======================================================================]
+
+# On Windows the header and library are installed in the same directory as this
+# script is therefore the following function is called to obtain its path.
+get_filename_component(CHARISMA_CONFIG_DIR "${CMAKE_CURRENT_LIST_FILE}" DIRECTORY)
+
+# Find header.
+find_path(CHARISMA_INCLUDE_DIR charisma.h
+          HINTS /usr/local/include /usr/include ${CHARISMA_CONFIG_DIR})
+
+# Find library.
+find_library(CHARISMA_LIBRARY
+             NAMES Charisma charisma
+             HINTS /usr/local/lib /usr/lib ${CHARISMA_CONFIG_DIR})
+
+# Not needed anymore.
+unset(CHARISMA_CONFIG_DIR)
+
+# Use version specified in top-level CMakeLists.txt
+set(CHARISMA_VERSION "@PROJECT_VERSION@")
+
+# Handle the QUIETLY and REQUIRED arguments and set CHARISMA_FOUND to TRUE if all listed variables are TRUE.
+include(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Charisma
+                                  FOUND_VAR CHARISMA_FOUND
+                                  REQUIRED_VARS CHARISMA_LIBRARY CHARISMA_INCLUDE_DIR
+                                  VERSION_VAR CHARISMA_VERSION)
+
+# Set result variables.
+if(CHARISMA_FOUND)
+    set(CHARISMA_LIBRARIES ${CHARISMA_LIBRARY})
+    set(CHARISMA_INCLUDE_DIRS ${CHARISMA_INCLUDE_DIR})
+endif()
+
+# Export a module.
+if(CHARISMA_FOUND AND NOT TARGET Railgun::Charisma)
+    add_library(Railgun::Charisma UNKNOWN IMPORTED)
+    set_target_properties(Railgun::Charisma PROPERTIES
+                          IMPORTED_LOCATION "${CHARISMA_LIBRARY}"
+                          INTERFACE_INCLUDE_DIRECTORIES "${CHARISMA_INCLUDE_DIR}")
+endif()
+
+# Cached variables should be hidden in the CMake interface unless the user explicitly asks to edit them.
+mark_as_advanced(CHARISMA_INCLUDE_DIR CHARISMA_LIBRARY)
