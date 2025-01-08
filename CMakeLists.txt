@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 project(charisma VERSION 1.0.0 LANGUAGES C)
 
 include(CheckCSourceCompiles)
+include(CMakePackageConfigHelpers)
 
 set(CHARISMA_TARGET_ENDIAN "auto" CACHE STRING "Endianness of the target hardware")
 set_property(CACHE CHARISMA_TARGET_ENDIAN PROPERTY STRINGS auto little big)
@@ -114,18 +115,16 @@ if (NOT HAVE_BSWAP)
     endif ()
 endif ()
 
+# Generate version information.
+write_basic_package_version_file(${CMAKE_BINARY_DIR}/CharismaConfigVersion.cmake COMPATIBILITY SameMajorVersion)
+
+# Generate configuration for CMake's find package tools.
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/CharismaConfig.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/CharismaConfig.cmake" @ONLY)
+
 # Generate the config.h header file and include its path in all targets.
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/config.h")
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_compile_definitions(HAVE_CONFIG_H=1)
-
-# Pre-process pkg-config and CharismaConfig.cmake files.
-set(prefix "${CMAKE_INSTALL_PREFIX}")
-set(exec_prefix "\${prefix}")
-set(libdir "\${exec_prefix}/lib")
-set(includedir "\${prefix}/include")
-set(VERSION ${PROJECT_VERSION})
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/charisma.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/charisma.pc" @ONLY)
 
 add_library(charisma STATIC charisma.c charisma.h)
 set_target_properties(charisma PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/charisma.h")
@@ -133,4 +132,3 @@ set_target_properties(charisma PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_
 install(TARGETS charisma ARCHIVE DESTINATION lib PUBLIC_HEADER DESTINATION include)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CharismaConfig.cmake DESTINATION cmake)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CharismaConfigVersion.cmake DESTINATION cmake)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/charisma.pc DESTINATION lib/pkgconfig)
