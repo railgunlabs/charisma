@@ -214,7 +214,7 @@ int32_t utf8_decode(const uint8_t *text, int32_t length, int32_t *index, uchar *
         4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // Defines bit patterns for masking the leading byte of a UTF-8 sequence.
         0,
-        0xFF, // Single byte (i.e. fits in ASCII).
+        (uint8_t)0xFF, // Single byte (i.e. fits in ASCII).
         0x1F, // Two byte sequence: 110xxxxx 10xxxxxx.
         0x0F, // Three byte sequence: 1110xxxx 10xxxxxx 10xxxxxx.
         0x07, // Four byte sequence: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx.
@@ -337,7 +337,7 @@ int32_t utf8_decode(const uint8_t *text, int32_t length, int32_t *index, uchar *
                     value = (value << UNICHAR_C(6)) | ((uchar)bytes[i] & UNICHAR_C(0x3F));
 
                     // Transition to the next DFA state.
-                    state = next_UTF8_DFA[state + byte_to_character_class[bytes[i]]];
+                    state = next_UTF8_DFA[(const uint8_t)state + byte_to_character_class[bytes[i]]];
                 }
 
                 // Verify the encoded character was well-formed.
