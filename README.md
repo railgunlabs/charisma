@@ -40,7 +40,7 @@ It's written in C99 and only requires a few features from libc which are listed 
 
 ## MISRA C:2012 Compliance
 
-Charisma honors all Required, Mandatory, and Advisory rules defined by MIRSA C:2012.
+Charisma honors all Required, Mandatory, and Advisory rules defined by MIRSA C:2012 and its four amendments.
 The complete compliance table is [documented here](https://railgunlabs.com/charisma/manual/misra-compliance/).
 
 ## How Charisma is Tested

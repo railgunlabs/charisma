@@ -44,10 +44,10 @@ static inline uint32_t swap32(uint32_t val)
 #elif defined(HAVE_MSVC_BYTESWAP)
     return _byteswap_ulong(val);
 #else
-    return ((val & UINT32_C(0x000000FF)) << UINT32_C(24)) |
-           ((val & UINT32_C(0x0000FF00)) << UINT32_C(8)) |
-           ((val & UINT32_C(0x00FF0000)) >> UINT32_C(8)) |
-           ((val & UINT32_C(0xFF000000)) >> UINT32_C(24));
+    return ((val & 0x000000FFu) << 24u) |
+           ((val & 0x0000FF00u) << 8u) |
+           ((val & 0x00FF0000u) >> 8u) |
+           ((val & 0xFF000000u) >> 24u);
 #endif
 }
 
@@ -62,7 +62,7 @@ static inline uint16_t swap16(uint16_t val)
 #elif defined(HAVE_MSVC_BYTESWAP)
     return _byteswap_ushort(val);
 #else
-    return (val << UINT16_C(8)) | (val >> UINT16_C(8));
+    return (val << (uint16_t)8) | (val >> (uint16_t)8);
 #endif
 }
 
@@ -170,7 +170,7 @@ static bool is_valid_scalar(uchar c)
     return is_scalar;
 }
 
-int32_t utf8_decode(const uint8_t *text, int32_t length, int32_t *index, uchar *c)
+int32_t utf8_decode(const uint8_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7
 {
     int32_t ret = UNSET;
 
@@ -214,7 +214,7 @@ int32_t utf8_decode(const uint8_t *text, int32_t length, int32_t *index, uchar *
         4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // Defines bit patterns for masking the leading byte of a UTF-8 sequence.
         0,
-        0xFF, // Single byte (i.e. fits in ASCII).
+        (uint8_t)0xFF, // Single byte (i.e. fits in ASCII).
         0x1F, // Two byte sequence: 110xxxxx 10xxxxxx.
         0x0F, // Three byte sequence: 1110xxxx 10xxxxxx 10xxxxxx.
         0x07, // Four byte sequence: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx.
@@ -254,7 +254,7 @@ int32_t utf8_decode(const uint8_t *text, int32_t length, int32_t *index, uchar *
     };
 
     // The acceptance state for the UTF-8 DFA.
-    static const uint8_t DFA_ACCEPTANCE_STATE = UINT8_C(0);
+    static const uint8_t DFA_ACCEPTANCE_STATE = 0;
 
     // Load the text offset into a register for speedy access.
     register int32_t text_offset = *index;
@@ -272,7 +272,7 @@ int32_t utf8_decode(const uint8_t *text, int32_t length, int32_t *index, uchar *
         const uint8_t *bytes = &text[text_offset];
         
         // Check if NUL (U+0000) was reached if this is a null-terminated string.
-        if ((length < 0) && (bytes[0] == UINT8_C(0x0)))
+        if ((length < 0) && (bytes[0] == (uint8_t)0x0))
         {
             *c = UNICHAR_C('\0');
             ret = 0;
@@ -300,7 +300,7 @@ int32_t utf8_decode(const uint8_t *text, int32_t length, int32_t *index, uchar *
                 // or the end of the sequence was reached.
                 for (int32_t i = 1; i < seqlen; i++)
                 {
-                    if (bytes[i] == UINT8_C(0x0))
+                    if (bytes[i] == (uint8_t)0x0)
                     {
                         *c = UNICHAR_C(0xFFFD);
                         ret = -1;
@@ -337,7 +337,7 @@ int32_t utf8_decode(const uint8_t *text, int32_t length, int32_t *index, uchar *
                     value = (value << UNICHAR_C(6)) | ((uchar)bytes[i] & UNICHAR_C(0x3F));
 
                     // Transition to the next DFA state.
-                    state = next_UTF8_DFA[state + byte_to_character_class[bytes[i]]];
+                    state = next_UTF8_DFA[(const uint8_t)state + byte_to_character_class[bytes[i]]];
                 }
 
                 // Verify the encoded character was well-formed.
@@ -358,7 +358,7 @@ int32_t utf8_decode(const uint8_t *text, int32_t length, int32_t *index, uchar *
     return ret;
 }
 
-static int32_t utf16decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c, ByteSwap16 swap)
+static int32_t decode16(const uint16_t *text, int32_t length, int32_t *index, uchar *c, ByteSwap16 swap)
 {
     // LCOV_EXCL_START
     assert(text);
@@ -376,7 +376,7 @@ static int32_t utf16decode(const uint16_t *text, int32_t length, int32_t *index,
         *c = UNICHAR_C('\0');
         ret = 0;
     }
-    else if ((length < 0) && (text[text_offset] == UINT16_C(0x0000)))
+    else if ((length < 0) && (text[text_offset] == (uint16_t)0x0000))
     {
         *c = UNICHAR_C('\0');
         ret = 0;
@@ -398,7 +398,7 @@ static int32_t utf16decode(const uint16_t *text, int32_t length, int32_t *index,
                 *index += 1;
                 ret = -1;
             }
-            else if (text[text_offset + 1] == UINT16_C(0x0))
+            else if (text[text_offset + 1] == (uint16_t)0x0)
             {
                 *c = UNICHAR_C(0xFFFD);
                 *index += 1;
@@ -441,22 +441,22 @@ static int32_t utf16decode(const uint16_t *text, int32_t length, int32_t *index,
     return ret;
 }
 
-int32_t utf16be_decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c)
+int32_t utf16be_decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7
 {
-    return utf16decode(text, length, index, c, swap16_be);
+    return decode16(text, length, index, c, &swap16_be);
 }
 
-int32_t utf16le_decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c)
+int32_t utf16le_decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7
 {
-    return utf16decode(text, length, index, c, swap16_le);
+    return decode16(text, length, index, c, &swap16_le);
 }
 
-int32_t utf16_decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c)
+int32_t utf16_decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7
 {
-    return utf16decode(text, length, index, c, swap16_nop);
+    return decode16(text, length, index, c, &swap16_nop);
 }
 
-static int32_t utf32decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c, ByteSwap32 swap)
+static int32_t decode32(const uint32_t *text, int32_t length, int32_t *index, uchar *c, ByteSwap32 swap)
 {
     // LCOV_EXCL_START
     assert(text);
@@ -502,22 +502,22 @@ static int32_t utf32decode(const uint32_t *text, int32_t length, int32_t *index,
     return ret;
 }
 
-int32_t utf32be_decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c)
+int32_t utf32be_decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7
 {
-    return utf32decode(text, length, index, c, swap32_be);
+    return decode32(text, length, index, c, &swap32_be);
 }
 
-int32_t utf32le_decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c)
+int32_t utf32le_decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7
 {
-    return utf32decode(text, length, index, c, swap32_le);
+    return decode32(text, length, index, c, &swap32_le);
 }
 
-int32_t utf32_decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c)
+int32_t utf32_decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7
 {
-    return utf32decode(text, length, index, c, swap32_nop);
+    return decode32(text, length, index, c, &swap32_nop);
 }
 
-int32_t utf8_encode(uchar c, uint8_t *buf)
+int32_t utf8_encode(uchar c, uint8_t *buf) // cppcheck-suppress misra-c2012-8.7
 {
     // LCOV_EXCL_START
     assert(buf);
@@ -534,29 +534,29 @@ int32_t utf8_encode(uchar c, uint8_t *buf)
     }
     else if (c <= UNICHAR_C(0x7FF))
     {
-        buf[0] = (uint8_t)(c >> UNICHAR_C(6)) | UINT8_C(0xC0);
-        buf[1] = (uint8_t)(c & UNICHAR_C(0x3F)) | UINT8_C(0x80);
+        buf[0] = (uint8_t)(c >> UNICHAR_C(6)) | (uint8_t)0xC0;
+        buf[1] = (uint8_t)(c & UNICHAR_C(0x3F)) | (uint8_t)0x80;
         ret = 2;
     }
     else if (c <= UNICHAR_C(0xFFFF))
     {
-        buf[0] = (uint8_t)(c >> UNICHAR_C(12)) | UINT8_C(0xE0);
-        buf[1] = (uint8_t)((c >> UNICHAR_C(6)) & UNICHAR_C(0x3F)) | UINT8_C(0x80);
-        buf[2] = (uint8_t)(c & UNICHAR_C(0x3F)) | UINT8_C(0x80);
+        buf[0] = (uint8_t)(c >> UNICHAR_C(12)) | (uint8_t)0xE0;
+        buf[1] = (uint8_t)((c >> UNICHAR_C(6)) & UNICHAR_C(0x3F)) | (uint8_t)0x80;
+        buf[2] = (uint8_t)(c & UNICHAR_C(0x3F)) | (uint8_t)0x80;
         ret = 3;
     }
     else
     {
-        buf[0] = (uint8_t)(c >> UNICHAR_C(18)) | UINT8_C(0xF0);
-        buf[1] = (uint8_t)((c >> UNICHAR_C(12)) & UNICHAR_C(0x3F)) | UINT8_C(0x80);
-        buf[2] = (uint8_t)((c >> UNICHAR_C(6)) & UNICHAR_C(0x3F)) | UINT8_C(0x80);
-        buf[3] = (uint8_t)(c & UNICHAR_C(0x3F)) | UINT8_C(0x80);
+        buf[0] = (uint8_t)(c >> UNICHAR_C(18)) | (uint8_t)0xF0;
+        buf[1] = (uint8_t)((c >> UNICHAR_C(12)) & UNICHAR_C(0x3F)) | (uint8_t)0x80;
+        buf[2] = (uint8_t)((c >> UNICHAR_C(6)) & UNICHAR_C(0x3F)) | (uint8_t)0x80;
+        buf[3] = (uint8_t)(c & UNICHAR_C(0x3F)) | (uint8_t)0x80;
         ret = 4;
     }
     return ret;
 }
 
-static int32_t utf16encode(uchar c, uint16_t *buf, ByteSwap16 swap)
+static int32_t encode16(uchar c, uint16_t *buf, ByteSwap16 swap)
 {
     // LCOV_EXCL_START
     assert(buf);
@@ -585,22 +585,22 @@ static int32_t utf16encode(uchar c, uint16_t *buf, ByteSwap16 swap)
     return ret;
 }
 
-int32_t utf16be_encode(uchar c, uint16_t *buf)
+int32_t utf16be_encode(uchar c, uint16_t *buf) // cppcheck-suppress misra-c2012-8.7
 {
-    return utf16encode(c, buf, swap16_be);
+    return encode16(c, buf, &swap16_be);
 }
 
-int32_t utf16le_encode(uchar c, uint16_t *buf)
+int32_t utf16le_encode(uchar c, uint16_t *buf) // cppcheck-suppress misra-c2012-8.7
 {
-    return utf16encode(c, buf, swap16_le);
+    return encode16(c, buf, &swap16_le);
 }
 
-int32_t utf16_encode(uchar c, uint16_t *buf)
+int32_t utf16_encode(uchar c, uint16_t *buf) // cppcheck-suppress misra-c2012-8.7
 {
-    return utf16encode(c, buf, swap16_nop);
+    return encode16(c, buf, &swap16_nop);
 }
 
-static int32_t utf32encode(uchar c, uint32_t *buf, ByteSwap32 swap)
+static int32_t encode32(uchar c, uint32_t *buf, ByteSwap32 swap) // cppcheck-suppress misra-c2012-8.7
 {
     // LCOV_EXCL_START
     assert(buf);
@@ -622,17 +622,17 @@ static int32_t utf32encode(uchar c, uint32_t *buf, ByteSwap32 swap)
     return ret;
 }
 
-int32_t utf32be_encode(uchar c, uint32_t *buf)
+int32_t utf32be_encode(uchar c, uint32_t *buf) // cppcheck-suppress misra-c2012-8.7
 {
-    return utf32encode(c, buf, swap32_be);
+    return encode32(c, buf, &swap32_be);
 }
 
-int32_t utf32le_encode(uchar c, uint32_t *buf)
+int32_t utf32le_encode(uchar c, uint32_t *buf) // cppcheck-suppress misra-c2012-8.7
 {
-    return utf32encode(c, buf, swap32_le);
+    return encode32(c, buf, &swap32_le);
 }
 
-int32_t utf32_encode(uchar c, uint32_t *buf)
+int32_t utf32_encode(uchar c, uint32_t *buf) // cppcheck-suppress misra-c2012-8.7
 {
-    return utf32encode(c, buf, swap32_nop);
+    return encode32(c, buf, &swap32_nop);
 }
