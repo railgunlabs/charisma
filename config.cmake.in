@@ -2,10 +2,13 @@
  *  Charisma - Unicode® character encoder and decoder library.
  *  Copyright (c) 2025 Railgun Labs, LLC
  *
- *  This file is part of Charisma, distributed under a non-commercial use software
- *  license. For the full terms see the included LICENSE file. If you did not
- *  receive a LICENSE file or you would like to purchase a commercial license,
- *  contact us at <https://RailgunLabs.com/contact/>.
+ *  This software is dual-licensed: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License version 3
+ *  as published by the Free Software Foundation. For the terms of this
+ *  license, see <https://www.gnu.org/licenses/>.
+ *
+ *  Alternatively, you can license this software under a proprietary
+ *  license, as set out in <https://railgunlabs.com/charisma/license/>.
  */
 
 #ifndef CHARISMA_CONFIG_H
