@@ -4,7 +4,7 @@
   <img alt="Charisma" src=".github/charisma.svg" width="408px">
 </picture>
 
-**Char**isma is a Unicode® character decoder and encoder library written in C99 with no dependencies.
+**Char**isma is a Unicode® character decoder and encoder library that conforms to the MISRA C:2012 coding standard.
 It provides functions for decoding and encoding characters _safely_ in UTF-8, UTF-16, and UTF-32 (big or little endian).
 It can _recover_ from malformed characters, allowing decoding to continue.
 
@@ -27,6 +27,11 @@ It's critical for software that processes external text to use a _robust_ charac
 * Extensively tested (see below)
 * No dependencies
 
+## MISRA C:2012 Compliance
+
+Charisma honors all Required, Mandatory, and Advisory rules defined by MIRSA C:2012 and its four amendments.
+The complete compliance table is [documented here](https://railgunlabs.com/charisma/manual/misra-compliance/).
+
 ## Ultra Portable
 
 Charisma is _ultra portable_.
@@ -37,11 +42,6 @@ It's written in C99 and only requires a few features from libc which are listed 
 | **stdint.h** | `uint8_t`, `uint16_t`, <br/> `int32_t`, `uint32_t` | |
 | **stdbool.h** | |  `bool`, `true`, `false` |
 | **assert.h** | |  `assert` |
-
-## MISRA C:2012 Compliance
-
-Charisma honors all Required, Mandatory, and Advisory rules defined by MIRSA C:2012 and its four amendments.
-The complete compliance table is [documented here](https://railgunlabs.com/charisma/manual/misra-compliance/).
 
 ## How Charisma is Tested
 
