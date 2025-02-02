@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(charisma VERSION 1.0.1 LANGUAGES C)
+project(charisma VERSION 1.0.2 LANGUAGES C)
 
 include(CheckCSourceCompiles)
 include(CMakePackageConfigHelpers)
