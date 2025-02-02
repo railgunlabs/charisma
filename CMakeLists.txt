@@ -126,9 +126,16 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config.cmake.in" "${CMAKE_CURRENT_BI
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_compile_definitions(HAVE_CONFIG_H=1)
 
-add_library(charisma STATIC charisma.c charisma.h)
-set_target_properties(charisma PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/charisma.h")
+add_library(charisma_static STATIC charisma.c charisma.h)
+set_target_properties(charisma_static PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/charisma.h")
+target_compile_definitions(charisma_static PUBLIC -DCHARISMA_STATIC)
 
+add_library(charisma SHARED charisma.c charisma.h)
+set_target_properties(charisma PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/charisma.h")
+set_target_properties(charisma PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_compile_definitions(charisma PRIVATE -DDLL_EXPORT)
+
+install(TARGETS charisma_static ARCHIVE DESTINATION lib PUBLIC_HEADER DESTINATION include)
 install(TARGETS charisma ARCHIVE DESTINATION lib PUBLIC_HEADER DESTINATION include)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CharismaConfig.cmake DESTINATION cmake)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CharismaConfigVersion.cmake DESTINATION cmake)

@@ -4,7 +4,8 @@ EXTRA_DIST = autogen.sh LICENSE CMakeLists.txt CharismaConfig.cmake.in config.cm
 
 AUTOMAKE_OPTIONS = subdir-objects
 
-nodist_include_HEADERS = charisma.h
+include_HEADERS = charisma.h
 
-lib_LIBRARIES = libcharisma.a
-libcharisma_a_SOURCES = charisma.c charisma.h
+lib_LTLIBRARIES = libcharisma.la
+libcharisma_la_SOURCES = charisma.c charisma.h
+libcharisma_la_LDFLAGS = -no-undefined -version-info 0:0:0
