@@ -135,6 +135,16 @@ set_target_properties(charisma PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_
 set_target_properties(charisma PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_compile_definitions(charisma PRIVATE -DDLL_EXPORT)
 
+if (CMAKE_C_COMPILER_ID MATCHES "Clang" OR
+    CMAKE_C_COMPILER_ID MATCHES "GNU")
+    target_compile_options(charisma PRIVATE -pedantic)
+endif ()
+
+if (CMAKE_C_COMPILER_ID MATCHES "Clang")
+    target_compile_options(charisma PRIVATE -Wall -Wextra -Wconversion -Wno-missing-field-initializers
+        -Wdouble-promotion -Wno-unused-parameter -Wno-unused-function -Wno-sign-conversion)
+endif ()
+
 install(TARGETS charisma_static ARCHIVE DESTINATION lib PUBLIC_HEADER DESTINATION include)
 install(TARGETS charisma ARCHIVE DESTINATION lib PUBLIC_HEADER DESTINATION include)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CharismaConfig.cmake DESTINATION cmake)

@@ -574,14 +574,20 @@ static int32_t encode16(uchar c, uint16_t *buf, ByteSwap16 swap)
     }
     else if (c <= UNICHAR_C(0xFFFF))
     {
-        buf[0] = swap(c);
+        buf[0] = swap((uint16_t)c);
         ret = 1;
     }
     else
     {
         const uchar LEAD_OFFSET = UNICHAR_C(0xD800) - (UNICHAR_C(0x10000) >> UNICHAR_C(10));
-        buf[0] = swap(LEAD_OFFSET + (c >> UNICHAR_C(10)));
-        buf[1] = swap(UNICHAR_C(0xDC00) + (c & UNICHAR_C(0x3FF)));
+        const uchar high = LEAD_OFFSET + (c >> UNICHAR_C(10));
+        const uchar low = UNICHAR_C(0xDC00) + (c & UNICHAR_C(0x3FF));
+        // LCOV_EXCL_START
+        assert(high <= UNICHAR_C(0xFFFF));
+        assert(low <= UNICHAR_C(0xFFFF));
+        // LCOV_EXCL_STOP
+        buf[0] = swap((uint16_t)high);
+        buf[1] = swap((uint16_t)low);
         ret = 2;
     }
 
