@@ -173,7 +173,7 @@ static bool is_valid_scalar(uchar c)
     return is_scalar;
 }
 
-CHARISMA_API int32_t utf8_decode(const uint8_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf8_decode(const uint8_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     int32_t ret = UNSET;
 
@@ -444,17 +444,17 @@ static int32_t decode16(const uint16_t *text, int32_t length, int32_t *index, uc
     return ret;
 }
 
-CHARISMA_API int32_t utf16be_decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf16be_decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     return decode16(text, length, index, c, &swap16_be);
 }
 
-CHARISMA_API int32_t utf16le_decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf16le_decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     return decode16(text, length, index, c, &swap16_le);
 }
 
-CHARISMA_API int32_t utf16_decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf16_decode(const uint16_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     return decode16(text, length, index, c, &swap16_nop);
 }
@@ -505,22 +505,22 @@ static int32_t decode32(const uint32_t *text, int32_t length, int32_t *index, uc
     return ret;
 }
 
-CHARISMA_API int32_t utf32be_decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf32be_decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     return decode32(text, length, index, c, &swap32_be);
 }
 
-CHARISMA_API int32_t utf32le_decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf32le_decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     return decode32(text, length, index, c, &swap32_le);
 }
 
-CHARISMA_API int32_t utf32_decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf32_decode(const uint32_t *text, int32_t length, int32_t *index, uchar *c) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     return decode32(text, length, index, c, &swap32_nop);
 }
 
-CHARISMA_API int32_t utf8_encode(uchar c, uint8_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf8_encode(uchar c, uint8_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     // LCOV_EXCL_START
     assert(buf);
@@ -594,17 +594,17 @@ static int32_t encode16(uchar c, uint16_t *buf, ByteSwap16 swap)
     return ret;
 }
 
-CHARISMA_API int32_t utf16be_encode(uchar c, uint16_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf16be_encode(uchar c, uint16_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     return encode16(c, buf, &swap16_be);
 }
 
-CHARISMA_API int32_t utf16le_encode(uchar c, uint16_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf16le_encode(uchar c, uint16_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     return encode16(c, buf, &swap16_le);
 }
 
-CHARISMA_API int32_t utf16_encode(uchar c, uint16_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf16_encode(uchar c, uint16_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     return encode16(c, buf, &swap16_nop);
 }
@@ -631,17 +631,17 @@ static int32_t encode32(uchar c, uint32_t *buf, ByteSwap32 swap) // cppcheck-sup
     return ret;
 }
 
-CHARISMA_API int32_t utf32be_encode(uchar c, uint32_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf32be_encode(uchar c, uint32_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     return encode32(c, buf, &swap32_be);
 }
 
-CHARISMA_API int32_t utf32le_encode(uchar c, uint32_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf32le_encode(uchar c, uint32_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     return encode32(c, buf, &swap32_le);
 }
 
-CHARISMA_API int32_t utf32_encode(uchar c, uint32_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
+int32_t utf32_encode(uchar c, uint32_t *buf) // cppcheck-suppress misra-c2012-8.7 ; Public functions must have external linkage.
 {
     return encode32(c, buf, &swap32_nop);
 }
