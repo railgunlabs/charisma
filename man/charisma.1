@@ -1,0 +1,70 @@
+.TH "CHARISMA" "1" "Sep 5th 2025" "Charisma 1.1.0"
+.SH NAME
+charisma \- convert characters
+.\" --------------------------------------------------------------------------
+.SH SYNOPSIS
+charisma \fB\-\-from=\fR\fIENCODING\fR [\fB\-\-to=\fR\fIENCODING\fR] [\fB\-\-repair\fR]
+.PP
+charisma \fB\-\-version\fR
+.PP
+charisma \fB\-\-help\fR
+.PP
+(See the OPTIONS section for details.)
+.\" --------------------------------------------------------------------------
+.SH DESCRIPTION
+Charisma is a command-line interface to the C library of the same name.
+This program reads characters from \fCstdin\fR, converts them to the specified encoding form, and writes them to \fCstdout\fR.
+Any errors are written to \fCstderr\fR.
+.PP
+The \fIENCODING\fP argument must be one of the following: \fIutf8\fR, \fIutf16\fR, \fIutf16le\fR, \fIutf16be\fR, \fIutf32\fR, \fIutf32le\fR, or \fIutf32be\fR.
+Where \fIutf16\fR and \fIutf32\fR specify native byte order.
+When processing the argument all case differences, low line characters (U+005F), and hyphen-minus characters (U+002D) are ignored.
+.\" --------------------------------------------------------------------------
+.SH OPTIONS
+.TP
+.BR \-r
+.TQ
+.BR \-\-repair
+Replace malformed character sequences with the Unicode Replacement Character (U+FFFD) and continue processing.
+If this option is omitted, then the proram terminates if a malformed character sequence is read.
+.TP
+.BR \-f
+.TQ
+.BR \-\-from "=\fIENCODING\fP"
+Character encoding read from \fCstdin\fR.
+.TP
+.BR \-t
+.TQ
+.BR \-\-to "=\fIENCODING\fP"
+Character encoding written to \fCstdout\fR.
+Defaults to the \fIENCODING\fP specified by \fB\-\-from\fR.
+.TP
+.BR \-\-help
+Display a help message and exit.
+.TP
+.BR \-\-version
+Output version information and exit.
+.\" --------------------------------------------------------------------------
+.SH EXIT STATUS
+The exit status is 0 on success, 1 if a malformed character sequence is read, 2 if a general error occured, and 3 if an invalid command-line option was specified.
+.\" --------------------------------------------------------------------------
+.SH SEE ALSO
+.BR charisma (3)
+.\" --------------------------------------------------------------------------
+.SH AUTHOR
+.UR https://railgunlabs.com
+Railgun Labs
+.UE .
+.\" --------------------------------------------------------------------------
+.SH INTERNET RESOURCES
+The online documentation is
+.UR https://railgunlabs.com/charisma
+published here
+.UE .
+.\" --------------------------------------------------------------------------
+.SH LICENSING
+Charisma is Free Software distributed under the GNU General Public License version 3 as published by the Free Software Foundation.
+Alternatively, you can license the library under a proprietary license, as set out on the
+.UR https://railgunlabs.com/charisma/license/
+Railgun Labs website
+.UE .

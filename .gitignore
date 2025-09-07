@@ -1,5 +1,6 @@
 build
 charisma.pc
+charisma
 Makefile
 Makefile.in
 autom4te*
@@ -16,5 +17,9 @@ libtool
 stamp-h1
 .dirstamp
 .deps
+.libs
 *.tar.gz
 *.gz
+*.la
+*.o
+*.lo

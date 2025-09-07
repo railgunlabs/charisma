@@ -3,8 +3,8 @@
  *  Copyright (c) 2025 Railgun Labs, LLC
  *
  *  This software is dual-licensed: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License version 3
- *  as published by the Free Software Foundation. For the terms of this
+ *  it under the terms of the GNU General Public License version 3 as
+ *  published by the Free Software Foundation. For the terms of this
  *  license, see <https://www.gnu.org/licenses/>.
  *
  *  Alternatively, you can license this software under a proprietary
@@ -18,7 +18,7 @@
 #if defined(HAVE_CONFIG_H)
     #include "config.h"
 #elif !defined(HAVE_BIG_ENDIAN) && !defined(HAVE_LITTLE_ENDIAN)
-    #error please define 'HAVE_BIG_ENDIAN' or 'HAVE_LITTLE_ENDIAN' if targeting a big or endian system
+    #error Please define 'HAVE_BIG_ENDIAN' or 'HAVE_LITTLE_ENDIAN' if targeting a big or little endian system.
 #endif
 
 #if defined(HAVE_FREEBSD_BSWAP)

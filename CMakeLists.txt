@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(charisma VERSION 1.0.3 LANGUAGES C)
+project(charisma VERSION 1.1.0 LANGUAGES C)
 
 include(CheckCSourceCompiles)
 include(CMakePackageConfigHelpers)
@@ -115,6 +115,19 @@ if (NOT HAVE_BSWAP)
     endif ()
 endif ()
 
+# Check for POSIX functions which are required to build the command-line interface.
+check_c_source_compiles(
+    "
+    #include <unistd.h>
+    int main(int argc, char *argv[]) {
+        char buffer[8];
+        ssize_t r = read(STDIN_FILENO, buffer, sizeof(buffer));
+        return 0;
+    }
+    "
+    HAVE_POSIX_ENVIRONMENT
+)
+
 # Generate version information.
 write_basic_package_version_file(${CMAKE_BINARY_DIR}/CharismaConfigVersion.cmake COMPATIBILITY SameMajorVersion)
 
@@ -135,6 +148,16 @@ set_target_properties(charisma PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_
 set_target_properties(charisma PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_compile_definitions(charisma PRIVATE -DDLL_EXPORT)
 
+if (HAVE_POSIX_ENVIRONMENT)
+    add_executable(charisma_cli extras/charisma-cli.c charisma.c charisma.h)
+    target_include_directories(charisma_cli PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+    set_target_properties(charisma_cli PROPERTIES OUTPUT_NAME "charisma")
+else ()
+    message(WARNING "Skipping building the command-line interface because it requires a POSIX-compliant environment.")
+endif ()
+
+add_subdirectory(man)
+
 if (CMAKE_C_COMPILER_ID MATCHES "Clang" OR
     CMAKE_C_COMPILER_ID MATCHES "GNU")
     target_compile_options(charisma PRIVATE -pedantic)
@@ -147,5 +170,6 @@ endif ()
 
 install(TARGETS charisma_static ARCHIVE DESTINATION lib PUBLIC_HEADER DESTINATION include)
 install(TARGETS charisma ARCHIVE DESTINATION lib PUBLIC_HEADER DESTINATION include)
+install(TARGETS charisma_cli RUNTIME DESTINATION bin)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CharismaConfig.cmake DESTINATION cmake)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CharismaConfigVersion.cmake DESTINATION cmake)
