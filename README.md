@@ -45,9 +45,8 @@ It's written in C99 and only requires a few features from libc which are listed 
 
 ## How Charisma is Tested
 
-* 100% branch coverage
-* Unit tests
-* Fuzz tests
+* Unit tests with 100% branch coverage
+* Fuzz tests (libFuzzer and AFL++)
 * Static analysis
 * Valgrind analysis
 * Code sanitizers (UBSAN, ASAN, and MSAN)
