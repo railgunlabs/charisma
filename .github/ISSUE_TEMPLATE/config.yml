@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Report a Defect
+  - name: 📚 Documentation
+    url: https://railgunlabs.com/charisma/manual
+    about: Review documentation and code examples.
+  - name: 🔹 Basic Support
     url: https://railgunlabs.com/contribute
-    about: When something isn't working right.
-  - name: Premium Support
+    about: Submit unsolicited bugs reports and code contributions.
+  - name: 💎 Premium Support
     url: https://railgunlabs.com/services
-    about: Ask questions, get answers.
+    about: Priority support for bug reports and personal Q&A assistance.
