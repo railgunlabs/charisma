@@ -97,7 +97,10 @@ If you need Unicode algorithms, like normalization or collation, then use [Unico
 
 ## License
 
-Charisma is dual-licensed under the GNU General Public License version 3 (GPL v3) and a proprietary license, which can be purchased from [Railgun Labs](https://railgunlabs.com/charisma/license/).
+Charisma is available under the following licenses:
+
+* [GNU General Public License version 3 (GPL v3)](LICENSE)
+* [Commercial License](https://railgunlabs.com/charisma/license/)
 
 The unit tests are **not** open source.
 Access to them is granted exclusively to commercial licensees.
