@@ -29,7 +29,7 @@ It's critical for software that processes external text to use a _robust_ charac
 
 ## MISRA C:2012 Compliance
 
-Charisma honors all Required, Mandatory, and Advisory rules defined by MIRSA C:2012 and its four amendments.
+Charisma honors all Required, Mandatory, and Advisory rules defined by MISRA C:2012 and its four amendments.
 The complete compliance table is [documented here](https://railgunlabs.com/charisma/manual/misra-compliance/).
 
 ## Ultra Portable
